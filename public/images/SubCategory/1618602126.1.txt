@@ -1,0 +1,42 @@
+        $orders = Bought::all();
+        $searched = [];
+        $products = Product::all();
+        $time = time();
+        $currentYear = new Carbon($time);
+
+        if($request->month <10)
+        {
+            $request->month = "0". $request->month;
+        }
+
+        if($request->day <10)
+        {
+            $request->day = "0". $request->day;
+        }
+
+        foreach($orders as $order)
+        {
+
+            $dates[] = new Carbon($order->created_at->toDateString());
+        }
+
+        for ($i=0; $i <sizeof($dates) ; $i++) {
+            if($dates[$i]->month == $request->month  )
+            {
+                $searched[] = $orders[$i];
+            }
+            else if($dates[$i]->day == $request->day)
+            {
+                $searched[] = $orders[$i];
+            }
+            else if($dates[$i]->year == $request->year)
+            {
+                $searched[] = $orders[$i];
+            }
+        }
+        // dd($searched);
+        return view('search',[
+            'searched'=>$searched,
+            'currentYear'=>$currentYear,
+            'products'=>$products
+        ]);
